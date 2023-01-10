@@ -1,26 +1,21 @@
 'use strict';
 import { getElements } from './elementsGetter.js';
 import { initScoreBoard, updateScoreBoard } from './scoreboardService.js';
-import {
-  playbugSound,
-  playCarrotSound,
-  playgameWinSound,
-} from './soundService.js';
+import { playbugSound, playCarrotSound, playgameWinSound } from './sound.js';
 
 const CARROT_SIZE = 80;
 
 export default class Field {
-  constructor(carrotCount, bugCount) {
+  constructor() {
     const { field } = getElements();
-
-    this.carrotCount = carrotCount;
-    this.bugCount = bugCount;
     this.field = field;
     this.fieldRect = field.getBoundingClientRect();
-    this.field.addEventListener('click', this.#onClick.bind(this));
+    this.field.addEventListener('click', (event) => this.#onClick(event));
   }
 
-  init() {
+  init(carrotCount, bugCount) {
+    this.carrotCount = carrotCount;
+    this.bugCount = bugCount;
     this.field.innerHTML = '';
     initScoreBoard();
     this.#addItem('carrot', this.carrotCount, 'img/carrot.png');
@@ -32,7 +27,7 @@ export default class Field {
   }
 
   removeItemClickAction() {
-    this.field.removeEventListener('click', this.#onClick.bind(this));
+    this.field.removeEventListener('click', (event) => this.#onClick(event));
   }
 
   #addItem(className, count, imgPath) {
@@ -47,17 +42,13 @@ export default class Field {
       item.setAttribute('src', imgPath);
       item.style.position = 'absolute';
 
-      const x = this.#randomNumber(x1, x2);
-      const y = this.#randomNumber(y1, y2);
+      const x = randomNumber(x1, x2);
+      const y = randomNumber(y1, y2);
       item.style.left = `${x}px`;
       item.style.top = `${y}px`;
 
       this.field.appendChild(item);
     }
-  }
-
-  #randomNumber(min, max) {
-    return Math.random() * (max - min) + min;
   }
 
   #onClick(event) {
@@ -74,4 +65,8 @@ export default class Field {
       this.onItemClick && this.onItemClick(false);
     }
   }
+}
+
+function randomNumber(min, max) {
+  return Math.random() * (max - min) + min;
 }

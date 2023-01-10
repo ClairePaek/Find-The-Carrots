@@ -2,7 +2,6 @@
 import { getElements } from './elementsGetter.js';
 
 const { gameScore, gameTimer } = getElements();
-const GAME_DURATION_SEC = 5;
 let timer = undefined;
 let score = 0;
 
@@ -11,8 +10,8 @@ function showTimerAndScore() {
   gameTimer.style.visibility = 'visible';
 }
 
-function startGameTimer(stopAction, started) {
-  let remainingTimeSec = GAME_DURATION_SEC;
+function startGameTimer(gameDuration, stopAction, started) {
+  let remainingTimeSec = gameDuration;
   updateTimerText(remainingTimeSec);
 
   timer = setInterval(() => {
